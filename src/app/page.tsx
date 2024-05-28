@@ -11,6 +11,7 @@ const Page = () => {
 	const [isRecordingState, setIsRecordingState] = useState<boolean>(false); // State to mirror the ref
 	const [shouldStartCountdown, setShouldStartCountdown] =
 		useState<boolean>(false);
+	const [text, setText] = useState<string>('');
 
 	const updateRecordingState = (newState: boolean) => {
 		isRecording.current = newState;
@@ -40,6 +41,8 @@ const Page = () => {
 			const parsedLLMResponse = await llmResponse.json();
 
 			console.log('Parsed LLM Response', parsedLLMResponse);
+
+			setText(parsedLLMResponse.transcribed_text);
 		}
 	};
 
@@ -114,7 +117,12 @@ const Page = () => {
 		return () => clearInterval(timerId);
 	}, [shouldStartCountdown]);
 
-	return <div>{isRecordingState ? 'Recording...' : 'Not Recording'}</div>;
+	return (
+		<div>
+			<p>{isRecordingState ? 'Recording...' : 'Not Recording'}</p>
+			<p>{text}</p>
+		</div>
+	);
 };
 
 export default Page;
